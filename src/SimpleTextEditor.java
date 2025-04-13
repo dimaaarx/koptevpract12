@@ -93,7 +93,6 @@ public class SimpleTextEditor {
         System.out.print("Введіть текст для вставки: ");
         String newText = scanner.nextLine();
 
-        // Зчитуємо файл у масив рядків
         String[] lines = new String[1000];
         int count = 0;
 
@@ -107,6 +106,27 @@ public class SimpleTextEditor {
             return;
         }
 
-        // Вставляємо новий рядок
         String[] updated = new String[1001];
         int newIndex = 0;
+        for (int i = 0; i < count + 1; i++) {
+            if (i == insertAt - 1) {
+                updated[newIndex++] = newText;
+            }
+            if (i < count) {
+                updated[newIndex++] = lines[i];
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data.txt"))) {
+            for (int i = 0; i < newIndex; i++) {
+                if (updated[i] != null) {
+                    writer.write(updated[i]);
+                    writer.newLine();
+                }
+            }
+            System.out.println("Рядок успішно вставлено.");
+        } catch (IOException e) {
+            System.out.println("Помилка при записі у файл.");
+        }
+    }
+}
